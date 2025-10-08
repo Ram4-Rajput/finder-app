@@ -8,7 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ===== MongoDB Setup =====
-const MONGO_URI = "mongodb+srv://finderuser:sagarpurbusstand@cluster0.ifguvgs.mongodb.net/finderDB?retryWrites=true&w=majority&appName=Cluster0"; // replace with your URI
+const MONGO_URI = "mongodb+srv://finderuser:sagarpurhack@cluster0.ifguvgs.mongodb.net/finderDB?retryWrites=true&w=majority&appName=Cluster0"; // replace with your URI
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(()=>console.log("✅ Connected to MongoDB"))
   .catch(err=>console.error("❌ MongoDB connection error:", err));
