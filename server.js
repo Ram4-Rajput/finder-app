@@ -1,38 +1,38 @@
-const express = require("express");
-const cors = require("cors");
-const path = require("path");
+import express from 'express';
+import cors from 'cors';
+import mongoose from 'mongoose';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// Serve static files (like CSS, JS, images, etc.)
-app.use(express.static(__dirname));
+mongoose.connect('YOUR_MONGODB_CONNECTION_STRING', { useNewUrlParser: true, useUnifiedTopology: true });
 
-// Serve finder.html on the root route
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "finder.html"));
+const submissionSchema = new mongoose.Schema({
+  timestamp: Date,
+  features: String,
+  places: String,
+  phone: String,
+  email: String,
+  insta: String
 });
 
-// Endpoint for form submission (example)
-const fs = require('fs');
-const path = require('path');
+const Submission = mongoose.model('Submission', submissionSchema);
 
-app.post('/submit', upload.single('photo'), (req, res) => {
-  const data = req.body;
-  if(req.file){
-    const photoPath = path.join(__dirname, 'submissions', req.file.originalname);
-    fs.writeFileSync(photoPath, req.file.buffer);
+app.post('/submit', async (req, res) => {
+  try {
+    const data = req.body;
+    data.timestamp = new Date();
+    const submission = new Submission(data);
+    await submission.save();
+    res.json({ message: 'Submission saved to database!' });
+  } catch(err) {
+    res.status(500).json({ message: 'Error saving submission', error: err });
   }
-
-  const jsonPath = path.join(__dirname, 'submissions', `${Date.now()}.json`);
-  fs.writeFileSync(jsonPath, JSON.stringify(data, null, 2));
-
-  res.json({ message: 'Submission stored successfully ✅' });
 });
+
+app.listen(process.env.PORT || 3000, () => console.log('Server running'));
+
 
 
 
