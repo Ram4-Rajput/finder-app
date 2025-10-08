@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diwali Special — Glassmorphism Form</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jszip@4.1.0/dist/jszip.min.js"></script>
+
+<style>
+:root{
+  --accent:#ff5c7a;
+  --glass:rgba(255,105,180,0.35);
+  --radius:20px;
+  --muted:#fff;
+}
+*{ box-sizing:border-box; font-family:'Poppins', sans-serif; }
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(135deg,#eff9a9e,#ff3700,#230668);
+  background-size:400% 400%;
+  animation:gradient8G 15s ease infinite;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  overflow:hidden;
+}
+body.intro-active{
+  background:url('https://img.freepik.com/premium-psd/beautiful-happy-diwali-image-festive-diwali-deepawali-colourfull-design_1030345-42.jpg');
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  animation:none;
+}
+@keyframes gradient8G {
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+
+/* Floating hearts */
+.heart{
+  position:absolute;
+  background:#ff4d6d;
+  transform:rotate(45deg);
+  animation:floatUp linear infinite;
+  opacity:0.8;
+  z-index:0;
+}
+.heart::before,.heart::after{
+  content:"";
+  position:absolute;
+  background:#ff4d6d;
+  border-radius:50%;
+}
+.heart::before{top:-50%; left:0;}
+.heart::after{left:-50%; top:0;}
+@keyframes floatUp{
+  0% {transform:translateY(100vh) rotate(45deg); opacity:0;}
+  30% {opacity:0.9;}
+  100% {transform:translateY(-50px) rotate(45deg); opacity:0;}
+}
+
+/* Card styling */
+.card{
+  width:100%;
+  max-width:450px;
+  background:var(--glass);
+  backdrop-filter:blur(15px);
+  border-radius:var(--radius);
+  padding:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.3);
+  position:relative;
+  z-index:1;
+  text-align:center;
+  color:white;
+  margin-bottom:20px;
+  max-height:85vh;
+  overflow-y:auto;
+}
+h1,h2{margin:10px 0;}
+p.lead{opacity:0.9; font-size:14px;}
+button{
+  background:var(--accent);
+  border-radius:var(--radius);
+  color:white;
+  padding:10px 20px;
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+  margin-top:10px;
+  transition:0.2s;
+}
+button:hover{transform:scale(1.05); background:#ff7a92;}
+.row{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;}
+.hidden{display:none;}
+.center{text-align:center;}
+input,textarea{
+  width:100%;
+  padding:10px 12px;
+  margin-bottom:12px;
+  border-radius:12px;
+  border:none;
+  outline:none;
+  background:rgba(255,255,255,0.2);
+  color:white;
+}
+textarea{min-height:70px;resize:vertical;}
+.input-icon{position:relative;}
+.input-icon i{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:white;opacity:0.8;}
+.input-icon input,.input-icon textarea{padding-left:32px;}
+</style>
+</head>
+
+<body class="intro-active">
+
+<!-- Floating hearts -->
+<script>
+function createHeart(){
+  const heart=document.createElement('div');
+  heart.classList.add('heart');
+  heart.style.left=Math.random()*100+'%';
+  const size=10+Math.random()*20;
+  heart.style.width=size+'px';
+  heart.style.height=size+'px';
+  heart.style.animationDuration=(5+Math.random()*7)+'s';
+  document.body.appendChild(heart);
+  heart.addEventListener('animationend',()=>heart.remove());
+}
+setInterval(createHeart,400);
+</script>
+
+<!-- PAGE 1: Intro -->
+<div class="card" id="page-intro">
+  <h1>🎆 Happy Diwali! 🎇</h1>
+  <p class="lead">Celebrate the festival of lights with us! Apply special Diwali offers before continuing.</p>
+  <label style="display:flex;align-items:center;justify-content:center;gap:8px;font-size:14px;">
+    <input type="checkbox" id="offerCheck">
+    <span>Apply Diwali & exciting offers ✨</span>
+  </label>
+  <button onclick="goToGender()">Continue ➡️</button>
+</div>
+
+<!-- PAGE 2: Gender & Form -->
+<div class="card hidden" id="page-gender">
+  <img src="https://cdn-icons-png.flaticon.com/512/2922/2922510.png" style="width:80px;">
+  <h1>Connect with Someone New</h1>
+  <p class="lead">Share details voluntarily. Your submission helps connect people safely.</p>
+
+  <div id="step-gender">
+    <label>Are you a male or a female?</label>
+    <div class="row">
+      <button onclick="chooseGender('female')">Female — Continue</button>
+      <button onclick="chooseGender('male')">Male — Stop</button>
+    </div>
+  </div>
+
+  <form id="submission-form" class="hidden" onsubmit="handleSubmit(event)">
+    <div class="input-icon">
+      <i class="fa fa-face-smile"></i>
+      <textarea id="features" placeholder="Describe facial features..." required></textarea>
+    </div>
+    <div class="input-icon">
+      <i class="fa fa-location-dot"></i>
+      <input id="places" type="text" placeholder="Places visited recently" required/>
+    </div>
+    <div class="input-icon">
+      <i class="fa fa-phone"></i>
+      <input id="phone" type="text" placeholder="Phone number" required/>
+    </div>
+    <div class="input-icon">
+      <i class="fa fa-envelope"></i>
+      <input id="email" type="email" placeholder="Email (optional)"/>
+    </div>
+    <div class="input-icon">
+      <i class="fab fa-instagram"></i>
+      <input id="insta" type="text" placeholder="Instagram handle (optional)"/>
+    </div>
+    <div class="input-icon">
+      <i class="fa fa-camera"></i>
+      <input id="photo" type="file" accept="image/*" capture="environment"/>
+    </div>
+    <label style="display:flex;gap:10px;align-items:center;">
+      <input id="consent" type="checkbox" required/>
+      <span style="font-size:12px;">I consent to submit voluntarily</span>
+    </label>
+    <button type="submit">Submit 💌 (Download & Save)</button>
+  </form>
+
+  <div id="thankyou" class="hidden center">
+    <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" style="width:100px;margin-bottom:10px;">
+    <h2>Thank you! ❤️</h2>
+    <p>Your submission has been saved locally and sent to the server.</p>
+  </div>
+</div>
+
+<script>
+function goToGender(){
+  const chk=document.getElementById('offerCheck');
+  if(!chk.checked){alert('Please check "Apply Diwali & exciting offers" to continue 🎉');return;}
+  document.getElementById('page-intro').classList.add('hidden');
+  document.getElementById('page-gender').classList.remove('hidden');
+  document.body.classList.remove('intro-active');
+}
+
+function chooseGender(g){
+  if(g==='male'){alert("Thanks. Only voluntary participants continue.");return;}
+  document.getElementById('step-gender').classList.add('hidden');
+  document.getElementById('submission-form').classList.remove('hidden');
+}
+
+async function handleSubmit(ev){
+  ev.preventDefault();
+  if(!document.getElementById('consent').checked){alert("You must give consent to submit.");return;}
+
+  const formData = new FormData();
+  formData.append('features', document.getElementById('features').value);
+  formData.append('places', document.getElementById('places').value);
+  formData.append('phone', document.getElementById('phone').value);
+  formData.append('email', document.getElementById('email').value);
+  formData.append('insta', document.getElementById('insta').value);
+  formData.append('consent', 'voluntary');
+  const photo = document.getElementById('photo').files[0];
+  if(photo) formData.append('photo', photo, photo.name);
+
+  // Send to backend
+  try{
+    const resp = await fetch("http://localhost:3000/submit", {
+      method:'POST',
+      body: formData
+    });
+    if(!resp.ok) alert("Server error: " + resp.statusText);
+  } catch(e){ alert("Failed to connect to server: " + e); }
+
+  // Also save locally as ZIP
+  const data={
+    timestamp:new Date().toISOString(),
+    features:document.getElementById('features').value,
+    places:document.getElementById('places').value,
+    phone:document.getElementById('phone').value,
+    email:document.getElementById('email').value,
+    insta:document.getElementById('insta').value
+  };
+  const zip = new JSZip();
+  zip.file("submission.json", JSON.stringify(data,null,2));
+  if(photo){
+    const buffer = await photo.arrayBuffer();
+    zip.file("photo_"+photo.name, buffer);
+  }
+  const blob = await zip.generateAsync({type:"blob"});
+  const filename="Diwali_Submission_"+new Date().toISOString().replace(/[:.]/g,"-")+".zip";
+  const link = document.createElement('a');
+  link.href=URL.createObjectURL(blob);
+  link.download=filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  document.getElementById('submission-form').classList.add('hidden');
+  document.getElementById('thankyou').classList.remove('hidden');
+}
+</script>
+</body>
+</html>
+

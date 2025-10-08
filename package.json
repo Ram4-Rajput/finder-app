@@ -1,0 +1,17 @@
+{
+  "name": "website_2",
+  "version": "1.0.0",
+  "description": "Diwali Finder App",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Your Name",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "multer": "^2.0.2"
+  }
+}
+
