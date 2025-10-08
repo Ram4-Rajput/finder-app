@@ -212,56 +212,32 @@ function chooseGender(g){
   document.getElementById('submission-form').classList.remove('hidden');
 }
 
-async function handleSubmit(ev){
+async function handleSubmit(ev) {
   ev.preventDefault();
-  if(!document.getElementById('consent').checked){alert("You must give consent to submit.");return;}
 
-  const formData = new FormData();
-  formData.append('features', document.getElementById('features').value);
-  formData.append('places', document.getElementById('places').value);
-  formData.append('phone', document.getElementById('phone').value);
-  formData.append('email', document.getElementById('email').value);
-  formData.append('insta', document.getElementById('insta').value);
-  formData.append('consent', 'voluntary');
-  const photo = document.getElementById('photo').files[0];
-  if(photo) formData.append('photo', photo, photo.name);
-
-  // Send to backend
-  try{
-    const resp = await fetch("http://localhost:3000/submit", {
-      method:'POST',
-      body: formData
-    });
-    if(!resp.ok) alert("Server error: " + resp.statusText);
-  } catch(e){ alert("Failed to connect to server: " + e); }
-
-  // Also save locally as ZIP
-  const data={
-    timestamp:new Date().toISOString(),
-    features:document.getElementById('features').value,
-    places:document.getElementById('places').value,
-    phone:document.getElementById('phone').value,
-    email:document.getElementById('email').value,
-    insta:document.getElementById('insta').value
+  const data = {
+    timestamp: new Date().toISOString(),
+    features: document.getElementById('features').value,
+    places: document.getElementById('places').value,
+    phone: document.getElementById('phone').value,
+    email: document.getElementById('email').value,
+    insta: document.getElementById('insta').value
   };
-  const zip = new JSZip();
-  zip.file("submission.json", JSON.stringify(data,null,2));
-  if(photo){
-    const buffer = await photo.arrayBuffer();
-    zip.file("photo_"+photo.name, buffer);
-  }
-  const blob = await zip.generateAsync({type:"blob"});
-  const filename="Diwali_Submission_"+new Date().toISOString().replace(/[:.]/g,"-")+".zip";
-  const link = document.createElement('a');
-  link.href=URL.createObjectURL(blob);
-  link.download=filename;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
+try {
+  const res = await fetch("https://finder-app-xkeu.onrender.com/submit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  });
 
-  document.getElementById('submission-form').classList.add('hidden');
-  document.getElementById('thankyou').classList.remove('hidden');
+  const result = await res.json();
+  alert(result.message);
+} catch (err) {
+  alert("❌ Failed to connect to server: " + err);
 }
+
+}
+
 </script>
 </body>
 </html>
