@@ -212,31 +212,35 @@ function chooseGender(g){
   document.getElementById('submission-form').classList.remove('hidden');
 }
 
-async function handleSubmit(ev) {
+async function handleSubmit(ev){
   ev.preventDefault();
+  const consent = document.getElementById('consent').checked;
+  if(!consent){ alert("You must give consent!"); return; }
 
-  const data = {
-    timestamp: new Date().toISOString(),
-    features: document.getElementById('features').value,
-    places: document.getElementById('places').value,
-    phone: document.getElementById('phone').value,
-    email: document.getElementById('email').value,
-    insta: document.getElementById('insta').value
-  };
-try {
-  const res = await fetch("https://finder-app-xkeu.onrender.com/submit", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  });
+  const formData = new FormData();
+  formData.append("features", document.getElementById('features').value);
+  formData.append("places", document.getElementById('places').value);
+  formData.append("phone", document.getElementById('phone').value);
+  formData.append("email", document.getElementById('email').value);
+  formData.append("insta", document.getElementById('insta').value);
+  const photo = document.getElementById('photo').files[0];
+  if(photo) formData.append("photo", photo, photo.name);
 
-  const result = await res.json();
-  alert(result.message);
-} catch (err) {
-  alert("❌ Failed to connect to server: " + err);
+  try{
+    const res = await fetch("/submit", { method: "POST", body: formData });
+    const result = await res.json();
+    if(result.success){
+      alert(result.message);
+      document.getElementById('submission-form').reset();
+    } else {
+      alert("Error: " + result.message);
+    }
+  } catch(e){
+    alert("❌ Failed to connect to server: " + e);
+  }
 }
 
-}
+
 
 </script>
 </body>
