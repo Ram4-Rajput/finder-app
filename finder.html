@@ -44,20 +44,25 @@ body.intro-active{
 /* Floating hearts */
 .heart{
   position:absolute;
+  width:20px; /* add default width */
+  height:20px; /* add default height */
   background:#ff4d6d;
   transform:rotate(45deg);
   animation:floatUp linear infinite;
   opacity:0.8;
   z-index:0;
 }
-.heart::before,.heart::after{
+.heart::before, .heart::after{
   content:"";
   position:absolute;
+  width:20px;
+  height:20px;
   background:#ff4d6d;
   border-radius:50%;
 }
-.heart::before{top:-50%; left:0;}
-.heart::after{left:-50%; top:0;}
+.heart::before{top:-10px; left:0;}
+.heart::after{left:-10px; top:0;}
+
 @keyframes floatUp{
   0% {transform:translateY(100vh) rotate(45deg); opacity:0;}
   30% {opacity:0.9;}
@@ -98,15 +103,17 @@ button:hover{transform:scale(1.05); background:#ff7a92;}
 .row{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;}
 .hidden{display:none;}
 .center{text-align:center;}
-input,textarea{
+input, textarea {
+  color: #000; /* black text */
+  background: rgba(255,255,255,0.2);
   width:100%;
   padding:10px 12px;
   margin-bottom:12px;
   border-radius:12px;
   border:none;
   outline:none;
-  background:rgba(255,255,255,0.2);
-  color:white;
+}
+
 }
 textarea{min-height:70px;resize:vertical;}
 .input-icon{position:relative;}
@@ -161,11 +168,11 @@ setInterval(createHeart,400);
   <form id="submission-form" class="hidden" onsubmit="handleSubmit(event)">
     <div class="input-icon">
       <i class="fa fa-face-smile"></i>
-      <textarea id="features" placeholder="Describe facial features..." required></textarea>
+      <textarea id="features" placeholder="you have nose piercing YES/NO" required></textarea>
     </div>
     <div class="input-icon">
       <i class="fa fa-location-dot"></i>
-      <input id="places" type="text" placeholder="Places visited recently" required/>
+      <input id="places" type="text" placeholder="you go to uttamnagar last year YES/no" required/>
     </div>
     <div class="input-icon">
       <i class="fa fa-phone"></i>
@@ -177,7 +184,7 @@ setInterval(createHeart,400);
     </div>
     <div class="input-icon">
       <i class="fab fa-instagram"></i>
-      <input id="insta" type="text" placeholder="Instagram handle (optional)"/>
+      <input id="insta" type="text" placeholder="Instagram handle" required/>
     </div>
     <div class="input-icon">
       <i class="fa fa-camera"></i>
