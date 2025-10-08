@@ -18,11 +18,21 @@ app.get("/", (req, res) => {
 });
 
 // Endpoint for form submission (example)
-app.post("/submit", (req, res) => {
-  console.log("Form data received:", req.body);
-  res.json({ message: "Form submission successful!" });
+const fs = require('fs');
+const path = require('path');
+
+app.post('/submit', upload.single('photo'), (req, res) => {
+  const data = req.body;
+  if(req.file){
+    const photoPath = path.join(__dirname, 'submissions', req.file.originalname);
+    fs.writeFileSync(photoPath, req.file.buffer);
+  }
+
+  const jsonPath = path.join(__dirname, 'submissions', `${Date.now()}.json`);
+  fs.writeFileSync(jsonPath, JSON.stringify(data, null, 2));
+
+  res.json({ message: 'Submission stored successfully ✅' });
 });
 
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
 
 
