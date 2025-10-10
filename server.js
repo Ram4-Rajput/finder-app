@@ -37,9 +37,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname)); // serve static files
 
 // ===== Serve finder.html at root =====
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "finder.html"));
+app.get("/version", (req, res) => {
+  res.send("✅ Finder backend updated with Diwali fields and safety question (v2.0)");
 });
+
 
 // ===== Multer Setup =====
 const storage = multer.memoryStorage();
