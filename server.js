@@ -17,11 +17,16 @@ const submissionSchema = new mongoose.Schema({
   timestamp: { type: Date, default: Date.now },
   features: String,
   places: String,
+  gift: String,
+  crackers: String,
+  vibes: String,
+  safety: String,
   phone: String,
   email: String,
   insta: String,
   photoName: String
 });
+
 
 const Submission = mongoose.model("Submission", submissionSchema);
 
@@ -43,10 +48,22 @@ const upload = multer({ storage });
 // ===== POST /submit =====
 app.post("/submit", upload.single("photo"), async (req, res) => {
   try {
-    const { features, places, phone, email, insta } = req.body;
-    const photoName = req.file ? req.file.originalname : null;
+  const { features, places, gift, crackers, vibes, safety, phone, email, insta } = req.body;
+const photoName = req.file ? req.file.originalname : null;
 
-    const submission = new Submission({ features, places, phone, email, insta, photoName });
+const submission = new Submission({
+  features,
+  places,
+  gift,
+  crackers,
+  vibes,
+  safety,
+  phone,
+  email,
+  insta,
+  photoName
+});
+
     await submission.save();
 
     res.json({ success: true, message: "Form submitted successfully and saved in MongoDB!" });
