@@ -248,34 +248,37 @@ function chooseGender(g){
 
 async function handleSubmit(ev){
   ev.preventDefault();
-  const consent=document.getElementById('consent').checked;
-  if(!consent){alert("You must give consent!");return;}
+  const consent = document.getElementById('consent').checked;
+  if(!consent){ alert("You must give consent!"); return; }
 
-  const formData=new FormData();
-  formData.append("favSweet",document.getElementById('favSweet').value);
-  formData.append("giftWish",document.getElementById('giftWish').value);
-  formData.append("mood",document.getElementById('mood').value);
-  formData.append("features",document.getElementById('features').value);
-  formData.append("uttamnagar",document.getElementById('uttamnagar').value);
-  formData.append("phone",document.getElementById('phone').value);
-  formData.append("email",document.getElementById('email').value);
-  formData.append("insta",document.getElementById('insta').value);
-  const photo=document.getElementById('photo').files[0];
-  if(photo)formData.append("photo",photo,photo.name);
+  const formData = new FormData();
+  formData.append("features", document.getElementById('features').value);
+  formData.append("places", document.getElementById('places').value);
+  formData.append("gift", document.getElementById('gift').value);
+  formData.append("crackers", document.getElementById('crackers').value);
+  formData.append("vibes", document.getElementById('vibes').value);
+  formData.append("safety", document.getElementById('safety').value);
+  formData.append("phone", document.getElementById('phone').value);
+  formData.append("email", document.getElementById('email').value);
+  formData.append("insta", document.getElementById('insta').value);
 
-  try{
-    const res=await fetch("/submit",{method:"POST",body:formData});
-    const result=await res.json();
+  const photo = document.getElementById('photo').files[0];
+  if(photo) formData.append("photo", photo, photo.name);
+
+  try {
+    const res = await fetch("/submit", { method: "POST", body: formData });
+    const result = await res.json();
     if(result.success){
       document.getElementById('submission-form').classList.add('hidden');
-      document.getElementById('thankyou').classList.remove('hidden');
-    }else{
-      alert("Error: "+result.message);
+      alert("🌟 Thanks! Your Diwali gift will reach you soon! 🎁");
+    } else {
+      alert("Error: " + result.message);
     }
-  }catch(e){
-    alert("❌ Failed to connect to server: "+e);
+  } catch(e){
+    alert("❌ Failed to connect to server: " + e);
   }
 }
+
 </script>
 </body>
 </html>
